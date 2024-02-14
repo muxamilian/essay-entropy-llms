@@ -136,7 +136,7 @@ print(f'{spearmanr=}')
 results = []
 for i in [1]:
     coeffs = np.polyfit(scores, means, i)
-    x_fit = np.linspace(min(scores), max(scores), 500)
+    x_fit = np.linspace(0., 1., 500)
     y_fit = np.polyval(coeffs, x_fit)
     min_x = None
     min_y = float('inf')
@@ -168,35 +168,38 @@ for i in [1]:
     model = sm.OLS(means, x_poly).fit()
     print(model.summary())
 
-# plt.plot(scores, means, linestyle='None', marker='.', alpha=0.33, markeredgecolor='none')
-# plt.plot(*(results[0]))
-# # plt.plot(*(results[1]))
-# plt.show()
-    
+plt.plot(scores, means, linestyle='None', marker='.', alpha=0.33, markeredgecolor='none')
+plt.plot(*(results[0]))
+# plt.plot(*(results[1]))
+plt.show()
+quit()
+
 
 
 # Define the number of bins
+# num_bins = min(len(np.unique(scores)), 5)
+# delta = 1 if num_bins == 2 else 0
 
-num_bins = min(len(np.unique(scores)), 5)
-delta = 1 if num_bins == 2 else 0
+# x_values = scores
+# y_values = means
+# # Bin the x values
+# bins = np.linspace(0., 1., num_bins + (1 - delta))
+# indices = np.digitize(x_values, bins) - delta
 
-x_values = scores
-y_values = means
-# Bin the x values
-bins = np.linspace(0., 1., num_bins + (1 - delta))
-indices = np.digitize(x_values, bins) - delta
+# # Calculate average y for each bin
+# bin_averages = [y_values[indices == i].mean() for i in range((1-delta), num_bins+(1-delta))]
 
-# Calculate average y for each bin
-bin_averages = [y_values[indices == i].mean() for i in range((1-delta), num_bins+(1-delta))]
-
-# Plotting
-plt.bar(range(num_bins), bin_averages, width=1, edgecolor="black", align='center')
-if num_bins != 2:
-    plt.xticks(range(num_bins), [f"{bins[i]:.1f} - {bins[i+1]:.1f}" for i in range(num_bins)], rotation=45)
-else:
-    plt.xticks(range(num_bins), [f"{i}" for i in range(num_bins)], rotation=45)
-plt.xlabel('Bins')
-plt.ylabel('Average Y')
-plt.title('Average Y values in each X bin')
-plt.tight_layout()
-plt.show()
+# # Plotting
+# plt.bar(range(num_bins), bin_averages, width=1, edgecolor="black", align='center')
+# if num_bins != 2:
+#     plt.xticks(range(num_bins), [f"{bins[i]:.1f} - {bins[i+1]:.1f}" for i in range(num_bins)], rotation=45)
+# else:
+#     plt.xticks(range(num_bins), [f"{i}" for i in range(num_bins)], rotation=45)
+# to_plot = [results[0][0], results[0][1]]
+# to_plot[0] = to_plot[0] * (num_bins-1)# - (bins[1] - bins[0])/2
+# plt.plot(*to_plot, color="red")
+# plt.xlabel('Bins')
+# plt.ylabel('Average Y')
+# plt.title('Average Y values in each X bin')
+# plt.tight_layout()
+# plt.show()
