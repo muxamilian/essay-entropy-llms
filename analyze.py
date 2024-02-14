@@ -12,8 +12,10 @@ max_len = 500
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--raw_data_path', required=True)
-parser.add_argument('--raw_input_path', required=True)
+# parser.add_argument('--raw_data_path', default="final_output_bawe_mistral.jsonl")
+# parser.add_argument('--raw_input_path', default="final_bawe.json")
+parser.add_argument('--raw_data_path', default="final_output_asap_mistral.jsonl")
+parser.add_argument('--raw_input_path', default="final_asap_smaller.json")
 args = parser.parse_args()
 
 # raw_data_path = 'final_output_asap_mistral.jsonl'
@@ -166,30 +168,35 @@ for i in [1]:
     model = sm.OLS(means, x_poly).fit()
     print(model.summary())
 
-plt.plot(scores, means, linestyle='None', marker='.', alpha=0.33, markeredgecolor='none')
-plt.plot(*(results[0]))
-# plt.plot(*(results[1]))
-plt.show()
+# plt.plot(scores, means, linestyle='None', marker='.', alpha=0.33, markeredgecolor='none')
+# plt.plot(*(results[0]))
+# # plt.plot(*(results[1]))
+# plt.show()
     
 
 
-# # Define the number of bins
-# num_bins = 5
+# Define the number of bins
 
-# x_values = scores
-# y_values = means
-# # Bin the x values
-# bins = np.linspace(0., 1., num_bins+1)
-# indices = np.digitize(x_values, bins)
+num_bins = min(len(np.unique(scores)), 5)
+delta = 1 if num_bins == 2 else 0
 
-# # Calculate average y for each bin
-# bin_averages = [y_values[indices == i].mean() for i in range(1, num_bins+1)]
+x_values = scores
+y_values = means
+# Bin the x values
+bins = np.linspace(0., 1., num_bins + (1 - delta))
+indices = np.digitize(x_values, bins) - delta
 
-# # Plotting
-# plt.bar(range(num_bins), bin_averages, width=1, edgecolor="black", align='edge')
-# plt.xticks(range(num_bins), [f"{bins[i]:.2f}-{bins[i+1]:.2f}" for i in range(num_bins)], rotation=45)
-# plt.xlabel('Bins')
-# plt.ylabel('Average Y')
-# plt.title('Average Y values in each X bin')
-# plt.tight_layout()
-# plt.show()
+# Calculate average y for each bin
+bin_averages = [y_values[indices == i].mean() for i in range((1-delta), num_bins+(1-delta))]
+
+# Plotting
+plt.bar(range(num_bins), bin_averages, width=1, edgecolor="black", align='center')
+if num_bins != 2:
+    plt.xticks(range(num_bins), [f"{bins[i]:.1f} - {bins[i+1]:.1f}" for i in range(num_bins)], rotation=45)
+else:
+    plt.xticks(range(num_bins), [f"{i}" for i in range(num_bins)], rotation=45)
+plt.xlabel('Bins')
+plt.ylabel('Average Y')
+plt.title('Average Y values in each X bin')
+plt.tight_layout()
+plt.show()
