@@ -10,6 +10,15 @@ import copy
 
 max_len = 500
 
+def last_part(filename):
+    # Remove the file extension first
+    base = filename.rsplit('.', 1)[0]
+    # Now, we get the portion after the first part of the filename up to the .jsonl
+    parts = base.split('_')
+    # Since the filename structure is "final_output_asap_{last_part}.jsonl",
+    # we rejoin parts excluding the known first three components
+    last_part = '_'.join(parts[3:])
+    return last_part
 
 parser = argparse.ArgumentParser()
 # parser.add_argument('--raw_data_path', default="final_output_bawe_mistral.jsonl")
@@ -67,62 +76,68 @@ for array in nps:
 
 normalized = acc/nums
 
-# plt.plot(range(len(normalized)), normalized)
-# plt.show()
-
-# normalized_nps = [item[:min(500, len(item))]/normalized[:min(500, len(item))] for item in nps]
 normalized_nps = [item[:min(500, len(item))] for item in nps]
 means = np.array([np.mean(item) for item in normalized_nps])
 
-# inliers = (scores != 0) & (scores !=1)
-# scores = scores[inliers]
-# means = means[inliers]
+# import torch
+# from transformers import AutoModelForCausalLM, AutoTokenizer
+# pattern = r"<\w+\s\d+>"
+# nn = 'mistralai/Mistral-7B-v0.1'
+# nn_dtype = torch.bfloat16
+# tokenizer = AutoTokenizer.from_pretrained(nn, device_map='cpu')
+# actual_texts = []
+# token_lens = []
+# for line in input_lines:
+#     if 'asap' in args.raw_input_path:
+#         written_text = line[2]
+#     else:
+#         written_text = line['content']
+#     written_text_tokens = tokenizer(written_text, return_tensors="pt", add_special_tokens=False)
+#     written_text_len = int(written_text_tokens['input_ids'].shape[-1])
+#     inputs = copy.deepcopy(written_text_tokens)
+#     # import pdb; pdb.set_trace()
+#     inputs['input_ids'] = written_text_tokens['input_ids'][:,:501]
+#     inputs['attention_mask'] = written_text_tokens['attention_mask'][:,:501]
+#     token_len = inputs['input_ids'].shape[-1]
+#     token_lens.append(token_len)
+#     actual_text = tokenizer.decode(inputs['input_ids'][0], skip_special_tokens=True)
+#     # print(actual_text+'\n')
+#     actual_texts.append(actual_text)
+#     assert inputs.input_ids.shape[1] == inputs.attention_mask.shape[1]
+# tokens_per_text = np.array([len(re.findall(pattern, item))/len(item) for item in actual_texts])
+# 
+# print("tokens and means")
+# pearsonr = scipy.stats.pearsonr(tokens_per_text, means)
+# print(f'{pearsonr=}')
+# spearmanr = scipy.stats.spearmanr(tokens_per_text, means)
+# print(f'{spearmanr=}')
 
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-pattern = r"<\w+\s\d+>"
-nn = 'mistralai/Mistral-7B-v0.1'
-nn_dtype = torch.bfloat16
-tokenizer = AutoTokenizer.from_pretrained(nn, device_map='cpu')
-actual_texts = []
-token_lens = []
-for line in input_lines:
-    if 'asap' in args.raw_input_path:
-        written_text = line[2]
-    else:
-        written_text = line['content']
-    written_text_tokens = tokenizer(written_text, return_tensors="pt", add_special_tokens=False)
-    written_text_len = int(written_text_tokens['input_ids'].shape[-1])
-    inputs = copy.deepcopy(written_text_tokens)
-    # import pdb; pdb.set_trace()
-    inputs['input_ids'] = written_text_tokens['input_ids'][:,:501]
-    inputs['attention_mask'] = written_text_tokens['attention_mask'][:,:501]
-    token_len = inputs['input_ids'].shape[-1]
-    token_lens.append(token_len)
-    actual_text = tokenizer.decode(inputs['input_ids'][0], skip_special_tokens=True)
-    # print(actual_text+'\n')
-    actual_texts.append(actual_text)
-    assert inputs.input_ids.shape[1] == inputs.attention_mask.shape[1]
-tokens_per_text = np.array([len(re.findall(pattern, item))/len(item) for item in actual_texts])
-
-print("tokens and means")
-pearsonr = scipy.stats.pearsonr(tokens_per_text, means)
-print(f'{pearsonr=}')
-spearmanr = scipy.stats.spearmanr(tokens_per_text, means)
-print(f'{spearmanr=}')
-
-# lens = np.array([len(item) for item in actual_texts])
-print("mean lengths and means")
-pearsonr = scipy.stats.pearsonr(token_lens, means)
-print(f'{pearsonr=}')
-spearmanr = scipy.stats.spearmanr(token_lens, means)
-print(f'{spearmanr=}')
+# # lens = np.array([len(item) for item in actual_texts])
+# print("mean lengths and means")
+# pearsonr = scipy.stats.pearsonr(token_lens, means)
+# print(f'{pearsonr=}')
+# spearmanr = scipy.stats.spearmanr(token_lens, means)
+# print(f'{spearmanr=}')
 
 print("scores and means")
 pearsonr = scipy.stats.pearsonr(scores, means)
 print(f'{pearsonr=}')
 spearmanr = scipy.stats.spearmanr(scores, means)
 print(f'{spearmanr=}')
+
+contents = {}
+try:
+    with open('aggregate_results.json') as f:
+        contents = json.load(f)
+except FileNotFoundError:
+    pass
+ds_prefix = 'asap' if 'asap' in args.raw_data_path else 'bawe'
+if ds_prefix not in contents:
+    contents[ds_prefix] = {}
+contents[ds_prefix][last_part(args.raw_data_path)] = {'pearsonr': pearsonr, 'spearmanr': spearmanr}
+
+with open('aggregate_results.json', 'w') as f:
+    json.dump(contents, f, indent=4, sort_keys=True)
 
 # # Aggregating y-values for each unique x-value
 # xy_dict = defaultdict(list)
@@ -158,18 +173,20 @@ for i in [1]:
     model = sm.OLS(means, x_poly).fit()
     print(model.summary())
 
-    x_poly = np.column_stack([tokens_per_text] + [token_lens])
-    x_poly = sm.add_constant(x_poly)
-    model = sm.OLS(means, x_poly).fit()
-    print(model.summary())
+    # x_poly = np.column_stack([tokens_per_text] + [token_lens])
+    # x_poly = sm.add_constant(x_poly)
+    # model = sm.OLS(means, x_poly).fit()
+    # print(model.summary())
 
-    x_poly = np.column_stack([scores**j for j in range(1, i + 1)] + [tokens_per_text] + [token_lens])
-    x_poly = sm.add_constant(x_poly)
-    model = sm.OLS(means, x_poly).fit()
-    print(model.summary())
+    # x_poly = np.column_stack([scores**j for j in range(1, i + 1)] + [tokens_per_text] + [token_lens])
+    # x_poly = sm.add_constant(x_poly)
+    # model = sm.OLS(means, x_poly).fit()
+    # print(model.summary())
 
-plt.plot(scores, means, linestyle='None', marker='.', alpha=0.33, markeredgecolor='none')
-plt.plot(*(results[0]))
+plt.plot(scores, means, linestyle='None', marker='.', alpha=0.25, markeredgecolor='none', color='#8B0000')
+# plt.plot(*(results[0]), color='#DAA520')
+# plt.plot(*(results[0]), color='#FFD700')
+plt.plot(*(results[0]), color='#FFA500')
 # plt.plot(*(results[1]))
 plt.show()
 quit()
