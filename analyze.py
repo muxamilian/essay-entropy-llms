@@ -183,13 +183,18 @@ for i in [1]:
     # model = sm.OLS(means, x_poly).fit()
     # print(model.summary())
 
-plt.plot(scores, means, linestyle='None', marker='.', alpha=0.25, markeredgecolor='none', color='#8B0000')
+plt.plot(scores*100, means, linestyle='None', marker='.', alpha=0.25, markeredgecolor='none', color='#8B0000')
 # plt.plot(*(results[0]), color='#DAA520')
 # plt.plot(*(results[0]), color='#FFD700')
-plt.plot(*(results[0]), color='#FFA500')
+regression_line = list(results[0])
+regression_line[0] = regression_line[0] * 100
+plt.plot(*regression_line, color='#FFA500', alpha=0.75)
 # plt.plot(*(results[1]))
+plt.xlabel('essay grade (%)')
+plt.ylabel('average entropy per token')
+plt.tight_layout()
+plt.savefig(args.raw_data_path.split('.')[0])
 plt.show()
-quit()
 
 
 
