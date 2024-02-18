@@ -79,13 +79,16 @@ normalized = acc/nums
 aggregation_factor = 50
 normalized = np.mean(normalized.reshape(-1, aggregation_factor), axis=1)
 
-# print(f'{normalized=}')
-plt.plot(np.array(list(range(len(normalized))))*aggregation_factor, normalized, color='#8B0000')
+plt.figure(figsize=(7, 5))
+x = np.array(list(range(len(normalized))))*aggregation_factor+1
+plt.plot(x, normalized, color='#8B0000')
 plt.xlabel('nth token')
 plt.ylabel('average entropy')
+plt.xticks([1, 100, 200, 300, 400])
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.pdf')
-plt.show()
+# plt.show()
+plt.close()
 
 normalized_nps = [item[:min(500, len(item))] for item in nps]
 means = np.array([np.mean(item) for item in normalized_nps])
@@ -194,15 +197,14 @@ for i in [1]:
     # model = sm.OLS(means, x_poly).fit()
     # print(model.summary())
 
-plt.plot(scores*100, means, linestyle='None', marker='.', alpha=0.25, markeredgecolor='none', color='#8B0000')
-# plt.plot(*(results[0]), color='#DAA520')
-# plt.plot(*(results[0]), color='#FFD700')
+plt.figure(figsize=(7, 5))
+plt.plot(scores*100, means, linestyle='None', marker='.', alpha=0.25, markeredgecolor='none', color='#8B0000')#, label="data points")
 regression_line = list(results[0])
 regression_line[0] = regression_line[0] * 100
-plt.plot(*regression_line, color='#FFA500', alpha=0.75)
-# plt.plot(*(results[1]))
+plt.plot(*regression_line, color='#FFA500', alpha=0.75, label=f"Pearson's r: {pearsonr.statistic:.2}; p: {pearsonr.pvalue:.0e}")
 plt.xlabel('essay grade (%)')
 plt.ylabel('average entropy per token')
+plt.legend()
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.pdf')
 plt.show()

@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import json
+import os
+
+os.makedirs('plots', exist_ok=True)
 
 # Neural network parameters
 with open('params_by_net.json') as f:
@@ -9,9 +12,7 @@ with open('params_by_net.json') as f:
 with open('aggregate_results.json') as f:
     pearson_r = json.load(f)
 
-# Setup plot
 plt.figure(figsize=(7, 5))
-
 # Plot data points for ASAP dataset
 for net, param in params.items():
     plt.scatter(param, pearson_r["asap"][net]['pearsonr'][0], marker='x', color="#8B0000", s=50, label="ASAP" if net == "gpt" else "", alpha=0.75)
@@ -37,5 +38,5 @@ plt.grid(True, ls="--", linewidth=0.5, color='gray', alpha=0.5)
 plt.tight_layout()
 
 # Display the plot
-plt.savefig('all.pdf')
+plt.savefig('plots/all.pdf')
 plt.show()
