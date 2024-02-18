@@ -5,9 +5,9 @@ import scipy.stats
 from collections import defaultdict
 import statsmodels.api as sm
 import argparse
-import re
-import copy
+import os
 
+os.makedirs('plots', exist_ok=True)
 max_len = 500
 
 def last_part(filename):
@@ -75,6 +75,17 @@ for array in nps:
     nums[:len(array)] += 1
 
 normalized = acc/nums
+# Aggregate
+aggregation_factor = 50
+normalized = np.mean(normalized.reshape(-1, aggregation_factor), axis=1)
+
+# print(f'{normalized=}')
+plt.plot(np.array(list(range(len(normalized))))*aggregation_factor, normalized, color='#8B0000')
+plt.xlabel('nth token')
+plt.ylabel('average entropy')
+plt.tight_layout()
+plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.pdf')
+plt.show()
 
 normalized_nps = [item[:min(500, len(item))] for item in nps]
 means = np.array([np.mean(item) for item in normalized_nps])
@@ -193,7 +204,7 @@ plt.plot(*regression_line, color='#FFA500', alpha=0.75)
 plt.xlabel('essay grade (%)')
 plt.ylabel('average entropy per token')
 plt.tight_layout()
-plt.savefig(args.raw_data_path.split('.')[0])
+plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.pdf')
 plt.show()
 
 
