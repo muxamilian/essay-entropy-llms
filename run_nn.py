@@ -24,7 +24,10 @@ max_len = 500
 nn = 'facebook/opt-125m'
 nn_dtype = torch.float16
 
-output_path = 'final_output_bawe_opt_125m.jsonl'
+# nn = 'facebook/opt-2.7b'
+# nn_dtype = torch.float16
+
+output_path = 'final_output_bawe_opt-125m.jsonl'
 input_path = 'final_bawe.json'
 
 tokenizer = AutoTokenizer.from_pretrained(nn, device_map='cpu')
