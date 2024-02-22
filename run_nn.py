@@ -9,8 +9,8 @@ max_len = 500
 # nn = 'mistralai/Mistral-7B-v0.1'
 # nn_dtype = torch.bfloat16
 
-nn = 'TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T'
-nn_dtype = torch.float32
+# nn = 'TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T'
+# nn_dtype = torch.float32
 
 # nn = 'openai-community/gpt2'
 # nn_dtype = torch.float32
@@ -21,7 +21,13 @@ nn_dtype = torch.float32
 # nn = 'openai-community/gpt2-xl'
 # nn_dtype = torch.float32
 
-output_path = 'final_output_bawe_tinyllama.jsonl'
+nn = 'facebook/opt-125m'
+nn_dtype = torch.float16
+
+# nn = 'facebook/opt-2.7b'
+# nn_dtype = torch.float16
+
+output_path = 'final_output_bawe_opt-125m.jsonl'
 input_path = 'final_bawe.json'
 
 tokenizer = AutoTokenizer.from_pretrained(nn, device_map='cpu')
@@ -82,7 +88,7 @@ for line_index, line in tqdm(list(enumerate(all_texts))):
         outputs = model.generate(**modified_inputs, min_new_tokens=1, max_new_tokens=1, return_dict_in_generate=True, output_scores=True, pad_token_id=tokenizer.eos_token_id)
         all_outputs.append(outputs['scores'][0].to('cpu').squeeze())
 
-    probabilities = [torch.nn.functional.softmax(item) for item in all_outputs]
+    probabilities = [torch.nn.functional.softmax(item.float()) for item in all_outputs]
     entropies = [(torch.sum(torch.special.entr(item))).item() for item in probabilities]
 
     out_json = json.dumps(entropies)
