@@ -6,6 +6,7 @@ from collections import defaultdict
 import statsmodels.api as sm
 import argparse
 import os
+from scipy.interpolate import interp1d
 
 os.makedirs('plots', exist_ok=True)
 max_len = 500
@@ -76,15 +77,31 @@ for array in nps:
 
 normalized = acc/nums
 # Aggregate
-aggregation_factor = 50
-normalized = np.mean(normalized.reshape(-1, aggregation_factor), axis=1)
+aggregation_factor = 100
+# normalized = np.hstack([normalized[0], np.mean(normalized.reshape(-1, aggregation_factor), axis=1), normalized[-1]])
+first_group = np.mean(normalized[:aggregation_factor//2])
+middle_groups = np.mean(normalized[aggregation_factor//2:-aggregation_factor//2].reshape(-1, aggregation_factor), axis=1)
+last_group = np.mean(normalized[-aggregation_factor//2:])
+
+# Combine the first group, middle groups, and last group
+normalized = np.hstack([first_group, middle_groups, last_group])
 
 plt.figure(figsize=(7, 5))
-x = np.array(list(range(len(normalized))))*aggregation_factor+1
-plt.plot(x, normalized, color='#8B0000')
+x = np.array(list(range(len(normalized))))*aggregation_factor + 1
+y = normalized
+
+# Define the quadratic interpolation function
+f = interp1d(x, y, kind='quadratic')
+# New points where you want to interpolate
+xnew = np.linspace(np.min(x), np.max(x), num=100, endpoint=True)
+# Interpolated values at new points
+ynew = f(xnew)
+
+# plt.plot(x, normalized, color='#8B0000')
+plt.plot(xnew, ynew, color='#8B0000')
 plt.xlabel('nth token')
 plt.ylabel('average entropy')
-plt.xticks([1, 100, 200, 300, 400])
+plt.xticks([1, 100, 200, 300, 400, 500])
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.pdf')
 # plt.show()
@@ -207,7 +224,7 @@ plt.ylabel('average entropy per token')
 plt.legend()
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.pdf')
-plt.show()
+# plt.show()
 
 
 
