@@ -27,13 +27,13 @@ max_len = 500
 # nn = 'facebook/opt-2.7b'
 # nn_dtype = torch.float16 
 
-nn = 'google/gemma-2b'
-nn_dtype = torch.bfloat16
-
-# nn = 'google/gemma-7b'
+# nn = 'google/gemma-2b'
 # nn_dtype = torch.bfloat16
 
-output_path = 'final_output_asap_gemma-2B.jsonl'
+nn = 'google/gemma-7b'
+nn_dtype = torch.bfloat16
+
+output_path = 'final_output_asap_gemma-7B.jsonl'
 input_path = 'final_asap_smaller.json'
 
 tokenizer = AutoTokenizer.from_pretrained(nn, device_map='cpu')
