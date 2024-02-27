@@ -19,11 +19,11 @@ print('params', params)
 
 plt.figure(figsize=(7, 5))
 # Plot data points for ASAP dataset
-for net, param in params.items():
-    try:
-        plt.scatter(param, pearson_r["asap"][net]['pearsonr'][0], marker='x', color="#8B0000", s=50, label="ASAP" if net == "mistral" else "", alpha=0.75)
-    except KeyError as e:
-        print(e)
+# for net, param in params.items():
+#     try:
+#         plt.scatter(param, pearson_r["asap"][net]['pearsonr'][0], marker='x', color="#8B0000", s=50, label="ASAP" if net == "mistral" else "", alpha=0.75)
+#     except KeyError as e:
+#         print(e)
 
 # Plot data points for BAWE dataset
 for net, param in params.items():
@@ -35,14 +35,15 @@ for net, param in params.items():
 # Labels and legend
 plt.xlabel('Number of Parameters')
 plt.ylabel("Pearson's r")
-plt.legend()
+# plt.legend()
 
 # Adjust y-axis to be inverted from 0 to -0.5
-plt.ylim(-.25, .25)
+plt.ylim(-.25, 0)
 
 # Set logarithmic scale for x-axis with custom tick labels
 tick_values = list(params.values())
 tick_labels = [f"{net}, {params[net]/1e6:.0f}M" for net in params]
+tick_labels[1] = '\n'+tick_labels[1]
 plt.xscale('log')
 plt.xticks(tick_values, labels=tick_labels, rotation=45, ha="right")
 plt.grid(True, ls="--", linewidth=0.5, color='gray', alpha=0.5)
