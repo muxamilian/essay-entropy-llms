@@ -77,7 +77,7 @@ for array in nps:
 
 normalized = acc/nums
 # Aggregate
-aggregation_factor = 100
+aggregation_factor = 2
 # normalized = np.hstack([normalized[0], np.mean(normalized.reshape(-1, aggregation_factor), axis=1), normalized[-1]])
 first_group = np.mean(normalized[:aggregation_factor//2])
 middle_groups = np.mean(normalized[aggregation_factor//2:-aggregation_factor//2].reshape(-1, aggregation_factor), axis=1)

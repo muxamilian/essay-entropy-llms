@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import json
 import os
 
-exclude = ['tinyllama']
+exclude = ['tinyllama', 'gemma-7B', 'gemma-2B']
 
 os.makedirs('plots', exist_ok=True)
 
@@ -15,6 +15,7 @@ with open('aggregate_results.json') as f:
     pearson_r = json.load(f)
 
 params = dict([item for item in params.items() if not any([excluded_item in item[0] for excluded_item in exclude])])
+print('params', params)
 
 plt.figure(figsize=(7, 5))
 # Plot data points for ASAP dataset
@@ -37,7 +38,7 @@ plt.ylabel("Pearson's r")
 plt.legend()
 
 # Adjust y-axis to be inverted from 0 to -0.5
-plt.ylim(-1, 1)
+plt.ylim(-.25, .25)
 
 # Set logarithmic scale for x-axis with custom tick labels
 tick_values = list(params.values())
