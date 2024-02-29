@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import json
 import os
 
+plt.rcParams.update({
+  "text.usetex": True
+})
+
 exclude = ['tinyllama', 'gemma-7B', 'gemma-2B']
 
 os.makedirs('plots', exist_ok=True)
