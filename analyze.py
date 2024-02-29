@@ -219,10 +219,16 @@ plt.plot(scores*100, means, linestyle='None', marker='.', alpha=0.25, markeredge
 regression_line = list(results[0])
 regression_line[0] = regression_line[0] * 100
 plt.plot(*regression_line, color='#FFA500', alpha=0.75, label=f"Pearson's r: {pearsonr.statistic:.2}; p: {pearsonr.pvalue:.0e}")
+title = last_part(args.raw_data_path)
+title = '$\\textit{'+ title[0].upper() + title[1:] + '}$' + f' on the $\\textit{{{ds_prefix.upper()}}}$ dataset'
+# title = ''+ title[0].upper() + title[1:] + '' + f' on the {ds_prefix.upper()} dataset'
+# title = '$\\textit{bla}$ quak'
+plt.title(title)
 plt.xlabel('essay grade (%)')
 plt.ylabel('average entropy per token')
 plt.legend()
 plt.tight_layout()
+plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.svg')
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.pdf')
 # plt.show()
 

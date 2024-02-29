@@ -65,5 +65,6 @@ new_x_position = original_x + 10000000  # Adjust this value as needed
 ax.text(new_x_position, -0.298, tick_labels[1], ha='right', rotation=45)
 
 # Display the plot
+plt.savefig('plots/all.svg')
 plt.savefig('plots/all.pdf')
 # plt.show()
