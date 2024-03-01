@@ -21,6 +21,8 @@ with open('aggregate_results.json') as f:
 params = dict([item for item in params.items() if not any([excluded_item in item[0] for excluded_item in exclude])])
 print('params', params)
 
+colors = ["#8B0000", "#FFA500"]
+
 plt.figure(figsize=(7, 5))
 # Plot data points for ASAP dataset
 # for net, param in params.items():
@@ -32,11 +34,12 @@ plt.figure(figsize=(7, 5))
 # Plot data points for BAWE dataset
 for net, param in params.items():
     try:
-        plt.scatter(param, pearson_r["bawe"][net]['pearsonr'][0], marker='x', color="#FFA500", s=50, label="BAWE" if net == "mistral" else "", alpha=0.75)
+        plt.scatter(param, pearson_r["bawe"][net]['pearsonr'][0], marker='x', color="#8B0000", s=50, label="BAWE" if net == "mistral" else "", alpha=0.75)
     except KeyError as e:
         print(e)
 
 # Labels and legend
+plt.title('LLMs by correlation between essay entropy and essay grade')
 plt.xlabel('Number of Parameters')
 plt.ylabel("Pearson's r")
 # plt.legend()
@@ -56,13 +59,10 @@ plt.tight_layout()
 
 # Get the current axes
 ax = plt.gca()
-
 original_tick = ax.get_xticklabels()[1]
 original_x, original_y = original_tick.get_position()
-
 # Hide the original second tick label
 original_tick.set_visible(False)
-
 # Manually add a new text label for the second tick, adjust the position as needed
 new_x_position = original_x + 10000000  # Adjust this value as needed
 # ax.text(new_x_position, original_y, 'B', ha='right', rotation=45)

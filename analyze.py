@@ -25,6 +25,25 @@ def last_part(filename):
     last_part = '_'.join(parts[3:])
     return last_part
 
+def to_latex_exponent_only(s):
+    """
+    Converts a scientific notation number in string format to a LaTeX format focusing only on the exponent part.
+    
+    Parameters:
+    - s (str): A string representing a number in scientific notation (e.g., "9.64e-13").
+    
+    Returns:
+    - str: A LaTeX representation focusing only on the exponent part of the input number.
+    """
+    # Split the string into mantissa and exponent parts
+    parts = s.split('e')
+    exponent = parts[1]
+    
+    # Format the number in LaTeX's scientific notation syntax focusing only on the exponent
+    latex_str = f"10^{{{exponent}}}"
+    
+    return latex_str
+
 parser = argparse.ArgumentParser()
 # parser.add_argument('--raw_data_path', default="final_output_bawe_mistral.jsonl")
 # parser.add_argument('--raw_input_path', default="final_bawe.json")
@@ -222,7 +241,9 @@ plt.figure(figsize=(7, 5))
 plt.plot(scores*100, means, linestyle='None', marker='.', alpha=0.25, markeredgecolor='none', color='#8B0000')#, label="data points")
 regression_line = list(results[0])
 regression_line[0] = regression_line[0] * 100
-plt.plot(*regression_line, color='#FFA500', alpha=0.75, label=f"Pearson's r: {pearsonr.statistic:.2}; p: {pearsonr.pvalue:.0e}")
+p_value = f'{pearsonr.pvalue:.0e}'
+p_value_as_latex = to_latex_exponent_only(p_value)
+plt.plot(*regression_line, color='#FFA500', alpha=0.75, label=f"Pearson's r: {pearsonr.statistic:.2}; p: ${p_value_as_latex}$")
 title = last_part(args.raw_data_path)
 title = '$\\textit{'+ title[0].upper() + title[1:] + '}$' + f' on the $\\textit{{{ds_prefix.upper()}}}$ dataset'
 plt.title(title)
