@@ -47,10 +47,12 @@ def to_latex_exponent_only(s):
 parser = argparse.ArgumentParser()
 # parser.add_argument('--raw_data_path', default="final_output_bawe_mistral.jsonl")
 # parser.add_argument('--raw_input_path', default="final_bawe.json")
-parser.add_argument('--raw_data_path', default="final_output_asap_mistral.jsonl")
+parser.add_argument('--raw_data_path', default="final_output_asap_mistral-7B.jsonl")
 parser.add_argument('--raw_input_path', default="final_asap_smaller.json")
 args = parser.parse_args()
 
+ds_prefix = 'asap' if 'asap' in args.raw_data_path else 'bawe'
+ 
 # raw_data_path = 'final_output_asap_mistral.jsonl'
 # raw_input_path = 'final_asap_mistral.json'
 
@@ -125,6 +127,9 @@ plt.plot(xnew, ynew, color='#8B0000')
 plt.xlabel('nth token')
 plt.ylabel('average entropy')
 plt.xticks([1, 100, 200, 300, 400, 500])
+title = last_part(args.raw_data_path)
+title = 'Entropy of $\\textit{'+ title[0].upper() + title[1:] + '}$ predicting the nth token of an essay \n' + f' on the $\\textit{{{ds_prefix.upper()}}}$ dataset, averaged over all essays'
+plt.title(title)
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.pdf')
 # plt.show()
@@ -185,7 +190,6 @@ try:
         contents = json.load(f)
 except FileNotFoundError:
     pass
-ds_prefix = 'asap' if 'asap' in args.raw_data_path else 'bawe'
 if ds_prefix not in contents:
     contents[ds_prefix] = {}
 contents[ds_prefix][last_part(args.raw_data_path)] = {'pearsonr': pearsonr, 'spearmanr': spearmanr}
