@@ -45,7 +45,7 @@ plt.ylabel("Pearson's r")
 # plt.legend()
 
 # Adjust y-axis to be inverted from 0 to -0.5
-plt.ylim(-.25, 0)
+plt.ylim(-.2, 0)
 
 # Set logarithmic scale for x-axis with custom tick labels
 tick_values = list(params.values())
@@ -70,5 +70,5 @@ ax.text(new_x_position, -0.298, tick_labels[1], ha='right', rotation=45)
 
 # Display the plot
 plt.savefig('plots/all.svg')
-plt.savefig('plots/all.pdf')
+# plt.savefig('plots/all.pdf')
 # plt.show()

@@ -131,7 +131,8 @@ title = last_part(args.raw_data_path)
 title = 'Entropy of $\\textit{'+ title[0].upper() + title[1:] + '}$ predicting the nth token of an essay \n' + f' on the $\\textit{{{ds_prefix.upper()}}}$ dataset, averaged over all essays'
 plt.title(title)
 plt.tight_layout()
-plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.pdf')
+# plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.pdf')
+plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'_by_len.svg')
 # plt.show()
 plt.close()
 
@@ -256,7 +257,7 @@ plt.ylabel('average entropy per token')
 plt.legend()
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.svg')
-plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.pdf')
+# plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.pdf')
 # plt.show()
 
 
