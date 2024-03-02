@@ -11,7 +11,8 @@ body {
 <h1>Worse essays have higher entropy (judged by LLMs)</h1>
 
 <h2 style="font-weight: normal"><strong>Teaser:</strong> For all LLMs, bad essays are hard to understand. But to <em>smart</em> LLMs, good essays make sense. This can be a way to measure an LLM's reasoning ability.</h2>
-<img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/all.svg">
+<img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/all.svg"><br>
+Even though <em>gpt2</em> has more neurons than <em>opt-125M</em>, it seems "smarter" according to the plot above. However, gpt2 was released in 2019 while opt-125M was released in 2023. One can thus argue that gpt2, being older, uses its neurons less effectively than opt-125M.
 
 <h2>Correlation between essay grade and entropy</h2>
 
@@ -23,7 +24,7 @@ Average the entropies for an entire essay. Plot them along with the grade the es
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/final_output_asap_mistral-7B.svg">
 </p>
 
-<p>However, the <em>ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
+<p>However, the <em>e.ge ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
 <pre>
     Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. 
 </pre>
