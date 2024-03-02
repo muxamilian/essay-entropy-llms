@@ -39,9 +39,9 @@ for net, param in params.items():
         print(e)
 
 # Labels and legend
-plt.title('LLMs by correlation between essay entropy and essay grade')
+plt.title('LLMs by correlation between essay entropy and essay grade \non the $\\textit{BAWE}$ dataset')
 plt.xlabel('Number of Parameters')
-plt.ylabel("Pearson's r")
+plt.ylabel("Correlation (Pearson's r)")
 # plt.legend()
 
 # Adjust y-axis to be inverted from 0 to -0.5

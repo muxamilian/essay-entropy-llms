@@ -253,7 +253,7 @@ title = last_part(args.raw_data_path)
 title = '$\\textit{'+ title[0].upper() + title[1:] + '}$' + f' on the $\\textit{{{ds_prefix.upper()}}}$ dataset'
 plt.title(title)
 plt.xlabel('essay grade (\%)')
-plt.ylabel('average entropy per token')
+plt.ylabel('essay\'s average entropy')
 plt.legend()
 plt.tight_layout()
 plt.savefig('plots/'+args.raw_data_path.split('.')[0]+'.svg')

@@ -1,13 +1,40 @@
 <html>
-<head></head>
+<head>
+<style>
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}      
+</style>
+</head>
 <body>
 
 <h1>Worse essays have higher entropy (judged by LLMs)</h1>
 
-<p><strong>Teaser:</strong> For all LLMs, bad essays are hard to understand. But for <em>smart</em> LLMs, good essays make sense.</p>
+<h2 style="font-weight: normal"><strong>Teaser:</strong> For all LLMs, bad essays are hard to understand. But to <em>smart</em> LLMs, good essays make sense. This can be a way to measure an LLM's reasoning ability.</h2>
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/all.svg">
 
-<h2></h2>
+<h2>Correlation between essay grade and entropy</h2>
 
+<p>
+Take a large dataset (<a href="https://www.kaggle.com/competitions/asap-aes/data">ASAP</a>) with essays along with grades for these essays assigned by human reviewers. 
+Take an LLM like Mistral. For each essay, let it predict the next token: Give it the 1st token of an essay, let it predict the 2nd one. 
+Compute the entropy of the output probability distribution. Give it the 2nd token, let it predict the 3rd, compute the entropy etc. 
+Average the entropies for an entire essay. Plot them along with the grade the essay got. <br>
+<img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/final_output_asap_mistral-7B.svg">
+</p>
+
+<p>However, the <em>ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
+<pre>
+    Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. 
+</pre>
+<p>Also, since all dates and the names of months are anonymized, the word "May" is always erroneously anonymized as "@MONTH".</p>
+
+<p>The <em>BAWE</em> dataset doesn't have these anonymization related issues and is thus more sound for analysis than the <em>ASAP</em> dataset. 
+It contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" and "Distinction". </p>
+
+<p>
+Essays' entropy is highest in the beginning and gradually decreases gradually with each token being added. Intuitively, this means that with each additional token, the LLM understands more clearly what an essay is about and can thus predict the next token more easily. <br>
+<img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/final_output_bawe_mistral-7B_by_len.svg">
+</p>
 </body>
 </html>
