@@ -51,7 +51,7 @@ plt.ylabel("Correlation (Pearson's r)")
 plt.ylim(-.2, 0)
 
 # Set logarithmic scale for x-axis with custom tick labels
-tick_values = list(params.values())
+tick_values = list([params[net] for net in params if net not in error])
 tick_labels = [f"{net}, {params[net]/1e6:.0f}M" for net in params if net not in error]
 tick_values, tick_labels = zip(*sorted(zip(tick_values, tick_labels), key=lambda x: x[0]))
 plt.xscale('log')
