@@ -12,19 +12,19 @@ body {
 
 <h2 style="font-weight: normal"><strong>Teaser:</strong> For all LLMs, bad essays are hard to understand. But to <em>smart</em> LLMs, good essays make sense. This can be a way to measure an LLM's reasoning ability.</h2>
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/all.svg"><br>
-Even though <em>gpt2</em> has more neurons than <em>opt-125M</em>, it seems "smarter" according to the plot above. However, gpt2 was released in 2019 while opt-125M was released in 2023. One can thus argue that gpt2, being older, uses its neurons less effectively than opt-125M.
+Even though <em>gpt2</em> has more neurons than <em>opt-125M</em>, it seems "dumber" according to the plot above. However, gpt2 was released in 2019 while opt-125M was released in 2023. One can thus argue that gpt2, being older, uses its neurons less effectively than opt-125M.
 
 <h2>Correlation between essay grade and entropy</h2>
 
 <p>
-Take a large dataset (<a href="https://www.kaggle.com/competitions/asap-aes/data">ASAP</a>) with essays along with grades for these essays assigned by human reviewers. 
+Take a large dataset (e.g. <a href="https://www.kaggle.com/competitions/asap-aes/data">ASAP</a>) with essays along with grades for these essays assigned by human reviewers. 
 Take an LLM like Mistral. For each essay, let it predict the next token: Give it the 1st token of an essay, let it predict the 2nd one. 
 Compute the entropy of the output probability distribution. Give it the 2nd token, let it predict the 3rd, compute the entropy etc. 
-Average the entropies for an entire essay. Plot them along with the grade the essay got. <br>
+Average the entropies for an entire essay. Plot them along with the grade of the essay. <br>
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/final_output_asap_mistral-7B.svg">
 </p>
 
-<p>However, the <em>e.ge ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
+<p>However, the <em>ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
 <pre>
     Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. 
 </pre>
@@ -33,9 +33,11 @@ Average the entropies for an entire essay. Plot them along with the grade the es
 <p>The <em>BAWE</em> dataset doesn't have these anonymization related issues and is thus more sound for analysis than the <em>ASAP</em> dataset. 
 It contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" and "Distinction". </p>
 
+<h1>Entropy by token position</h1>
 <p>
-Essays' entropy is highest in the beginning and gradually decreases gradually with each token being added. Intuitively, this means that with each additional token, the LLM understands more clearly what an essay is about and can thus predict the next token more easily. <br>
+Essays' entropy is highest in the beginning and gradually decreases gradually with each token being added. Intuitively, this means that with each additional token, the LLM understands more clearly what an essay is about and can thus predict the next token more easily. Only the first 500 tokens are plotted. <br>
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/final_output_bawe_mistral-7B_by_len.svg">
 </p>
+<h1><a href="https://github.com/muxamilian/essay-entropy-llms">Code</a></h1>
 </body>
 </html>
