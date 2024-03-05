@@ -26,12 +26,13 @@ Average the entropies for an entire essay. Plot them along with the grade of the
 
 <p>However, the <em>ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
 <pre>
-    Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. 
+    Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. [...]
 </pre>
 <p>Also, since all dates and the names of months are anonymized, the word "May" is always erroneously anonymized as "@MONTH".</p>
 
 <p>The <em>BAWE</em> dataset doesn't have these anonymization related issues and is thus more sound for analysis than the <em>ASAP</em> dataset. 
-It contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" or "Distinction". </p>
+It contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" or "Distinction". 
+The first plot of this page was generated using the BAWE dataset. </p>
 
 <h1>Entropy by token position</h1>
 <p>
