@@ -8,7 +8,7 @@ body {
 </head>
 <body>
 
-<h1>Worse essays have higher entropy (judged by LLMs)</h1>
+<h1>Good essays have lower entropy (judged by LLMs)</h1>
 
 <h2 style="font-weight: normal"><strong>Teaser:</strong> For all LLMs, bad essays are hard to understand. But to <em>smart</em> LLMs, good essays make sense. This can be a way to measure an LLM's reasoning ability.</h2>
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/all.svg"><br>
@@ -26,12 +26,13 @@ Average the entropies for an entire essay. Plot them along with the grade of the
 
 <p>However, the <em>ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
 <pre>
-    Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. 
+    Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. [...]
 </pre>
 <p>Also, since all dates and the names of months are anonymized, the word "May" is always erroneously anonymized as "@MONTH".</p>
 
 <p>The <em>BAWE</em> dataset doesn't have these anonymization related issues and is thus more sound for analysis than the <em>ASAP</em> dataset. 
-It contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" or "Distinction". </p>
+The BAWE dataset contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" or "Distinction". 
+The first plot of this page was generated using the BAWE dataset. </p>
 
 <h1>Entropy by token position</h1>
 <p>
