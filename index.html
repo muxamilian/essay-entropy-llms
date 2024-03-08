@@ -3,12 +3,27 @@
 <style>
 body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}      
+}
+/* Base style for the image */
+img {
+  width: 100%; /* Make the image take up the full container width */
+  height: auto; /* Keep the image aspect ratio */
+  display: block; /* Prevent inline defaults */
+}
+
+/* Media query for desktops */
+@media (min-width: 1024px) { /* Adjust the min-width as needed for your design */
+  img {
+    max-width: 800px; /* Example max width to prevent the image from being too large on desktop */
+    margin-left: 0; /* Align the image to the left */
+    margin-right: auto; /* Ensures the rest of the margin is on the right, maintaining left alignment */
+  }
+}
 </style>
 </head>
 <body>
 
-<h1>Smart LLMs understand good essays</h1>
+<h1>Only smart LLMs can understand good essays</h1>
 
 <h2 style="font-weight: normal"><strong>Teaser:</strong> For all LLMs, bad essays are hard to understand. But to <em>smart</em> LLMs, good essays make sense. This can be a way to <em>measure an LLM's reasoning ability</em>.</h2>
 <img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/all.svg"><br>
