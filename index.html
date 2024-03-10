@@ -32,7 +32,7 @@ Even though <em>gpt2</em> (second from left) has more neurons than <em>opt-125M<
 <h2>Correlation between essay grade and entropy</h2>
 
 <p>
-Take a large dataset (e.g. <a href="https://www.kaggle.com/competitions/asap-aes/data">ASAP</a>) with essays along with grades for these essays assigned by human reviewers. 
+Take a large dataset (e.g. <a href="https://www.kaggle.com/competitions/asap-aes/data">ASAP</a>) with essays along with the grades of these essays assigned by human reviewers. 
 Take an LLM like Mistral. For each essay, let it predict the next token: Give it the 1st token of an essay, let it predict the 2nd one. 
 Compute the entropy of the output probability distribution. Give it the 2nd token, let it predict the 3rd, compute the entropy etc. 
 Average the entropies for an entire essay. Plot them along with the grade of the essay. <br>
