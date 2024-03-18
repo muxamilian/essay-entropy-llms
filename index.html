@@ -30,27 +30,15 @@ img {
 This plot shows that "smarter" LLMs have, on average, a stronger negative correlation between essay grade and essay entropy. <br>
 Even though <em>gpt2</em> (second from left) has more neurons than <em>opt-125M</em> (first from left), it seems "dumber" according to the plot above. However, gpt2 was released in 2019 while opt-125M was released in 2023. One can thus argue that gpt2, being older, uses its neurons less effectively than opt-125M.
 
-<h2>Correlation between essay grade and entropy</h2>
+<h2>How to compute the correlation between essay grade and entropy</h2>
 
 <p>
-Take a large dataset (e.g. <a href="https://www.kaggle.com/competitions/asap-aes/data">ASAP</a>) with essays along with the grades of these essays assigned by human reviewers. 
-Take an LLM like Mistral. For each essay, let it predict the next token: Give it the 1st token of an essay, let it predict the 2nd one. 
+Take a large dataset (e.g. <a href="https://warwick.ac.uk/fac/soc/al/research/collections/bawe/">BAWE</a>) with essays along with the grades of these essays assigned by human reviewers. 
+The BAWE dataset contains 2092 essays written by university students on various subjects. Each essay is graded with one of two grades, "Merit" or "Distinction". 
+Having the dataset, take an LLM like Mistral. For each essay, let it predict the next token: Give it the 1st token of an essay, let it predict the 2nd one. 
 Compute the entropy of the output probability distribution. Give it the 2nd token, let it predict the 3rd, compute the entropy etc. 
-Average the entropies for an entire essay. Plot them along with the grade of the essay. <br>
-<img src="https://github.com/muxamilian/essay-entropy-llms/raw/main/plots/final_output_asap_mistral-7B.svg"><br>
-This plot shows that the essays with better grades (on the right side) have lower entropy, meaning they're easier to understand for Mistral-7B, 
-while the badly graded essays (on the left) are harder to understand. 
+Average the entropies for an entire essay. Plot them along with the grade of the essay. 
 </p>
-
-<p>However, the <em>ASAP</em> dataset has some issues: It has heavy privacy masking, making essays read like this:</p>
-<pre>
-    Dear The @ORGANIZATION1, "@CAPS1, @CAPS1, @CAPS1" goes the floor. [...]
-</pre>
-<p>Also, since all dates and the names of months are anonymized, the word "May" is always erroneously anonymized as "@MONTH".</p>
-
-<p>The <em>BAWE</em> dataset doesn't have these anonymization related issues and is thus more sound for analysis than the <em>ASAP</em> dataset. 
-The BAWE dataset contains 2092 essays written by university students on various subjects. A disadvantage is that, unlike <em>ASAP</em>, each essay is graded with one of only two grades, "Merit" or "Distinction". 
-The first plot of this page was generated using the BAWE dataset. </p>
 
 <h1>Entropy by token position</h1>
 <p>

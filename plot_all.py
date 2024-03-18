@@ -73,5 +73,6 @@ ax.text(new_x_position, -0.24, tick_labels[1], ha='right', rotation=45)
 
 # Display the plot
 plt.savefig('plots/all.svg')
+plt.savefig('plots/all.png', dpi=300)
 # plt.savefig('plots/all.pdf')
 # plt.show()
