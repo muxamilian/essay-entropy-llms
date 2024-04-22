@@ -6,8 +6,8 @@ from tqdm import tqdm
 import os
 
 max_len = 500
-nn = 'mistralai/Mistral-7B-v0.1'
-nn_dtype = torch.bfloat16
+# nn = 'mistralai/Mistral-7B-v0.1'
+# nn_dtype = torch.bfloat16
 
 # nn = 'TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T'
 # nn_dtype = torch.float32
@@ -30,10 +30,13 @@ nn_dtype = torch.bfloat16
 # nn = 'google/gemma-2b'
 # nn_dtype = torch.bfloat16
 
-nn = 'google/gemma-7b'
+# nn = 'google/gemma-7b'
+# nn_dtype = torch.bfloat16
+
+nn = 'meta-llama/Meta-Llama-3-8B'
 nn_dtype = torch.bfloat16
 
-output_path = 'final_output_bawe_gemma-7B.jsonl'
+output_path = 'final_output_bawe_llama-8B.jsonl'
 input_path = 'final_bawe.json'
 
 tokenizer = AutoTokenizer.from_pretrained(nn, device_map='cpu')
@@ -92,7 +95,7 @@ for line_index, line in tqdm(list(enumerate(all_texts))):
         modified_inputs.data['attention_mask'] = modified_inputs.data['attention_mask'][:, :constant_part_len+i+1]
         modified_inputs = modified_inputs.to('cuda')
         outputs = model.generate(**modified_inputs, min_new_tokens=1, max_new_tokens=1, return_dict_in_generate=True, output_scores=True, pad_token_id=tokenizer.eos_token_id)
-        print(tokenizer.decode(outputs['sequences'][0], skip_special_tokens=True))
+        # print(tokenizer.decode(outputs['sequences'][0], skip_special_tokens=True))
         all_outputs.append(outputs['scores'][0].to('cpu').squeeze())
 
     probabilities = [torch.nn.functional.softmax(item.float()) for item in all_outputs]
